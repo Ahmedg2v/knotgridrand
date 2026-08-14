@@ -6,17 +6,32 @@ from rasterise import grid_path_3d
 # ENERGY CALCULATION
 
 def energy_calc(gd, fwd, bwd, alpha, beta, gamma):
-    '''calculate the energy of a certain configuration
-    
-    Parameters:
-    gd, fwd, bwd: knot dictionaries
-    
-    coefficients of different energy terms:
-    alpha: length coeff
-    beta: bends coeff
-    gamma: distance to com coeff
-    
-    Returns: energy as a float
+    '''calculate the energy of a certain configuration.
+
+    Parameters
+    ----------
+    gd : dict
+        Maps point indices to coordinates.
+
+    fwd : dict
+        Maps each point index to the next point along the knot.
+
+    bwd : dict
+        Maps point indices to the previous point along the knot.
+
+    alpha : float
+        Length coefficient.
+
+    beta : float
+        Bends coefficient.
+
+    gamma : float
+        Distance to center of mass coefficient.
+
+    Returns
+    -------
+    energy : float
+        Energy of the configuration.
     '''
     dot_sum=0
     potential=0
@@ -47,20 +62,34 @@ def energy_calc(gd, fwd, bwd, alpha, beta, gamma):
     return energy
 
 def energy_calc_local(x, gd, alpha, beta, gamma, window=5):
-    '''calculate the energy of a section of the knot
-    
-    Parameters:
-    x: index of the point around which the local energy is calculated
-    window: number of pts preceding and proceeding x used in the energy calculation
-    gd: knot dictionary
-    
-    coefficients of different energy terms:
-    alpha: length coeff
-    beta: bends coeff
-    gamma: distance to com coeff
-    
-    Returns: energy as a float
+    '''calculate the energy of a section of the knot.
+
+    Parameters
+    ----------
+    x : int
+        Index of the point around which the local energy is calculated.
+
+    gd : dict
+        Knot dictionary.
+
+    alpha : float
+        Length coefficient.
+
+    beta : float
+        Bends coefficient.
+
+    gamma : float
+        Distance to center of mass coefficient.
+
+    window : int, default=5
+        Number of points preceding and proceeding x used in the energy calculation.
+
+    Returns
+    -------
+    energy : float
+        Energy of the local section.
     '''
+
     dot_sum=0
     potential=0
     pts = np.array(list(gd.values()))
@@ -89,21 +118,56 @@ def energy_calc_local(x, gd, alpha, beta, gamma, window=5):
 # BFACF
 
 def BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, theta):
-    '''Run the BFACF algorithm 
+    '''Run the BFACF algorithm.
     
-    Parameters:
-    gd, fwd, bwd, gdc: knot dictionaries
-    next_key: new index not in the original dict
-    bx, by, bz, b_mat: cardinal vectors and 3D identity matrix, used for calculations
-    energy: energy of the initial configuration
-    T: temperature like parameter
-    alpha, beta, gamma: energy coefficients
-    theta: scaling factor for the probabilstic acceptance rules
+    Parameters
+    ----------
+    gd : dict
+        Maps point indices to coordinates.
+
+    fwd : dict
+        Maps each point index to the next point along the knot.
+
+    bwd : dict
+        Maps point indices to the previous point along the knot.
+
+    gdc : dict
+        Maps coordinate tuples to point indices.
+
+    next_key : int
+        New index not in the original dictionary.
+
+    bx, by, bz, b_mat : array-like
+        Cardinal vectors and 3D identity matrix, used for calculations.
+
+    energy : float
+        Energy of the initial configuration.
+
+    T : float
+        Temperature-like parameter for the probabilistic acceptance rules.
+
+    alpha : float
+        Length coefficient in energy calculation.
+
+    beta : float
+        Bends coefficient in energy calculation.
+
+    gamma : float
+        Distance to center of mass coefficient in energy calculation.
+
+    theta : float
+        Scaling factor for the probabilstic acceptance rules.
     
-    Returns:
-    gd, fwd, bwd, gdc: updated knot dictionaries
-    next_key: new key to be used as input for the next run
-    energy: energy of the new configuration
+    Returns
+    -------
+    gd, fwd, bwd, gdc : dicts
+        Updated knot dictionaries.
+
+    next_key : int
+        New key to be used as input for the next run.
+
+    energy : float
+        Energy of the new configuration.
     '''
     next_key = next_key+2
     idx = random.choice(list(gd.keys()))
@@ -227,21 +291,56 @@ def BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta
 
 def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, phi):
     '''Randomly pick a strand or random length along the knot and translate it a random 
-    distance distance in a random cardinal direction with a probability to make a second translation 
+    distance distance in a random cardinal direction with a probability to make a second translation. 
     
-    Parameters:
-    gd, fwd, bwd, gdc: knot dictionaries
-    next_key: new index not in the original dict
-    bx, by, bz, b_mat: cardinal vectors and 3D identity matrix, used for calculations
-    energy: energy of the initial configuration
-    T: temperature like parameter
-    alpha, beta, gamma: energy coefficients
-    phi: scaling factor for the probabilstic acceptance rules
+    Parameters
+    ----------
+    gd : dict
+        Maps point indices to coordinates.
+
+    fwd : dict
+        Maps each point index to the next point along the knot.
+
+    bwd : dict
+        Maps point indices to the previous point along the knot.
+
+    gdc : dict
+        Maps coordinate tuples to point indices.
+
+    next_key : int
+        New index not in the original dictionary.
+
+    bx, by, bz, b_mat : array-like
+        Cardinal vectors and 3D identity matrix, used for calculations.
+
+    energy : float
+        Energy of the initial configuration.
+
+    T : float
+        Temperature-like parameter for the probabilistic acceptance rules.
+
+    alpha : float
+        Length coefficient in energy calculation.
+
+    beta : float
+        Bends coefficient in energy calculation.
+
+    gamma : float
+        Distance to center of mass coefficient in energy calculation.
+
+    phi : float
+        Scaling factor for the probabilstic acceptance rules.
     
-    Returns:
-    gd, fwd, bwd, gdc: updated knot dictionaries
-    next_key: new key to be used as input for the next run
-    energy: energy of the new configuration
+    Returns
+    -------
+    gd, fwd, bwd, gdc : dicts
+        Updated knot dictionaries.
+
+    next_key : int
+        New key to be used as input for the next run.
+
+    energy : float
+        Energy of the new configuration.
     '''
     worked=False
     next_key0 = next_key+5
@@ -329,21 +428,56 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
 # THE RANDOMISATION LOOP
 
 def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1):
-    '''Randomise a given knot
+    '''Randomise a given knot using the BFACF algorithm and large scale slide moves.
     
-    Parameters:
-    gd, fwd, bwd, gdc: dictionaries storing the knot
-    t: number of time steps
-    next_key: new index not in the original dict
-    T: temperature like parameter
-    mod: number of time steps after which a slide move is attempted
-    alpha, beta, gamma: energy parameters
-    theta, phi: scaling factors for the probabilstic acceptance rules
+    Parameters
+    ----------
+    gd : dict
+        Maps point indices to coordinates.
+
+    fwd : dict
+        Maps each point index to the next point along the knot.
+
+    bwd : dict
+        Maps point indices to the previous point along the knot.
+
+    gdc : dict
+        Maps coordinate tuples to point indices.
+
+    t : int
+        Number of time steps.
+
+    next_key : int
+        New index not in the original dictionary.
+
+    T : float
+        Temperature-like parameter for the probabilistic acceptance rules.
+
+    mod : int
+        Number of time steps after which a slide move is attempted.
+
+    alpha : float
+        Length coefficient in energy calculation.
+
+    beta : float
+        Bends coefficient in energy calculation.
+
+    gamma : float
+        Distance to center of mass coefficient in energy calculation.
+
+    theta, phi : float
+        Scaling factors for the probabilstic acceptance rules for BFACF and Slide moves.
     
-    Returns:
-    gd, fwd, bwd, gdc: updated knot dictionaries
-    next_key: new key to be used as input in case of running the randomisation again without starting over
-    energies, slides, lengths, states: optional lists that store the knot quantities/states as needed
+    Returns
+    -------
+    gd, fwd, bwd, gdc : dict
+        Updated knot dictionaries.
+
+    next_key : int
+        New key to be used as input in case of running the randomisation again without starting over.
+
+    energies, slides, lengths, states : list
+        Optional lists that store the knot quantities/states as needed.
     '''
     energy = energy_calc(gd, fwd, bwd, alpha, beta, gamma)
     

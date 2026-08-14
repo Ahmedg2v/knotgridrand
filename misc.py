@@ -8,6 +8,24 @@ from scipy.spatial.transform import Rotation as R
 from dictionaries import array_knot
 
 def sta_writhe(grid_dict,forward_map,width):
+    '''Calculate the writhe of a knot using the Gauss integral approximation.
+    
+    Parameters
+    ----------
+    grid_dict : dict
+        Maps point indices to coordinates.
+
+    forward_map : dict
+        Maps each point index to the next point along the knot.
+
+    width : int
+        Width of the local region for writhe calculation.
+    
+    Returns
+    -------
+    sta : array-like, shape (N,1)
+        Array of local Segment-to-All writhe values.
+    '''
     with np.errstate(divide='ignore', invalid='ignore'):
         wknot = array_knot(grid_dict,forward_map)
         wtang = np.vstack((wknot[1:],wknot[0]))-wknot
@@ -43,12 +61,14 @@ def sta_writhe(grid_dict,forward_map,width):
     return sta
 
 def rotate(pts):
+    '''Rotate a set of points randomly in 3D space.'''
     quat = R.random().as_quat()    # (x, y, z, w)
     rot = R.from_quat(quat)
     centre = np.array([np.average(pts[:,0]),np.average(pts[:,1]),np.average(pts[:,2])])
     return rot.apply(pts-centre)+centre
     
 def alex(pts,var):
+    '''Calculate the Alexander polynomial of a knot given its coordinates.'''
     quat = R.random().as_quat()    # (x, y, z, w)
     rot = R.from_quat(quat)
     rotated_pts = rot.apply(pts)
@@ -59,6 +79,21 @@ def alex(pts,var):
     return alex
 
 def add_pts(arr, target):
+    '''Add points to a knot array until it reaches the target length.
+    
+    Parameters
+    ----------
+    arr : array-like, shape (N,3)
+        Array of knot points.
+        
+    target : int
+        Target length of the knot array.
+
+    Returns
+    -------
+    new_arr : array-like, shape (N,3)
+        Array of knot points with the target length.
+    '''
     #arr=array_knot(grid_dict,forward_map)          #not for bluebear - rand knots already converted to arrays 
     mids=(np.vstack((arr[1:],arr[0]))+arr)/2
 
@@ -82,6 +117,7 @@ def add_pts(arr, target):
     return new_arr
 
 def haus_like_area(hknot1,hknot2):
+    '''Calculate a Hausdorff-like area between two knots.'''
     hdist1=[]
     hdist2=[]
 
@@ -99,6 +135,7 @@ def haus_like_area(hknot1,hknot2):
     return np.max([area1,area2])
 
 def haus(hknot1,hknot2):
+    '''Calculate the Hausdorff distance between two knots.'''
     hdist1=[]
     hdist2=[]
 

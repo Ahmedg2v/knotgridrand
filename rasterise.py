@@ -4,13 +4,19 @@ import random
 # PROJECTING BASE KNOTS ONTO THE 3D LATTICE
 
 def get_grid(x, base_knots):
-    '''Generate a rasterised version of a specific knot
+    '''Generate a rasterised version of a specific knot.
     
-    Parameters:
-    x: id of the knot
-    base_knots: dictionary containing the database knots
-    
-    Returns: numpy array of shape (N,3) with integer values 
+    Parameters
+    ----------
+    x: string
+        ID of the knot
+    base_knots: dict
+        Dictionary containing the database knots
+
+    Returns
+    -------
+    grid_points: numpy array of shape (N,3) with integer values
+        Rasterised version of the knot
     '''
     knot = base_knots[x]
     grid_points = []
@@ -44,13 +50,19 @@ def get_grid(x, base_knots):
 
 
 def grid_path_3d(p0, p1):
-    '''Rasterize the line segment connecting two points such that there are no diagonal steps
-    
-    Parameters:
-    p0: start point
-    p1: end point
-    
-    Returns: numpy array of shape (N,3) with integer values
+    '''Rasterize the line segment connecting two points such that there are no diagonal steps.
+
+    Parameters
+    ----------
+    p0: array-like, shape (3,)
+        Start point.
+
+    p1: array-like, shape (3,)
+        End point.
+
+    Returns
+    -------
+    Rasterised line segment as a numpy array of shape (N,3) with integer values
     '''
     p0 = np.asarray(p0, dtype=float)
     p1 = np.asarray(p1, dtype=float)
