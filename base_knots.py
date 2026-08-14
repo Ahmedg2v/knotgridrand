@@ -11,7 +11,7 @@ def import_base_knots(x):
 
     return data_g
 
-def generate_base_knots_dict(x, n, N, sf):
+def generate_base_knots_dict(x, n=0, N=250, sf=20):
     '''generate a dictionary containing the specified range of knots
     
     Parameters:
@@ -22,19 +22,19 @@ def generate_base_knots_dict(x, n, N, sf):
     Returns: dictionary containing 'knot id: coords array' pairs 
     '''
     # max N is 12965 in the knotinfo dataset
-    f = import_base_knots(x)
+    f = import_base_knots(x)[n:N]
     pts_list=[]    
     knotid=[]
     base_knots1 = {}
     
-    for k in range(n,N):      # coords
+    for k in range(f.shape[0]):      # coords
         a = f[k,3].split(';')
         b = []
         for n in range(len(a)):
             b.append(a[n].split(','))
         pts_list.append(b)
 
-    for m in range(n,N):      # knot label
+    for m in range(f.shape[0]):      # knot label
         a1 = f[m,0]
         knotid.append(a1)      
         
