@@ -1,8 +1,6 @@
 import numpy as np
-import random
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import draw,pause,close
-import matplotlib
 from mpl_toolkits.mplot3d import Axes3D
 from dictionaries import array_knot
 

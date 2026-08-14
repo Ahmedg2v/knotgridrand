@@ -1,5 +1,4 @@
 import numpy as np
-import random
 
 # PROJECTING BASE KNOTS ONTO THE 3D LATTICE
 
