@@ -1,9 +1,5 @@
 import numpy as np
 import random
-import pyknotid.spacecurves as pks
-from pyknotid.spacecurves import Knot
-import pyknotid.invariants as pki
-import pyknotid as pk
 from scipy.spatial.transform import Rotation as R
 from dictionaries import array_knot
 
@@ -66,17 +62,6 @@ def rotate(pts):
     rot = R.from_quat(quat)
     centre = np.array([np.average(pts[:,0]),np.average(pts[:,1]),np.average(pts[:,2])])
     return rot.apply(pts-centre)+centre
-    
-def alex(pts,var):
-    '''Calculate the Alexander polynomial of a knot given its coordinates.'''
-    quat = R.random().as_quat()    # (x, y, z, w)
-    rot = R.from_quat(quat)
-    rotated_pts = rot.apply(pts)
-    K = Knot(rotated_pts)
-    ktry=K.gauss_code()
-    alex=pki.alexander(ktry, variable=var, simplify=True, mode='python')
-    
-    return alex
 
 def add_pts(arr, target):
     '''Add points to a knot array until it reaches the target length.
