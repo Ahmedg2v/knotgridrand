@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import gc
 
 # IMPORTING A SUBSET OF BASE KNOTS
 
@@ -48,8 +47,5 @@ def generate_base_knots_dict(x, n=0, N=250, sf=20):
         
     for l in range(len(knotid)):    # full
         base_knots[knotid[l]]=np.array([np.array(pts_list[l],dtype='d')*sf][0],dtype='d')
-    
-    del pts_list,f,knotid,b,a1,a
-    gc.collect()
     
     return base_knots
