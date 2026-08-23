@@ -115,4 +115,3 @@ def grid_path_3d(p0, p1):
         path.append((x, y, z))
 
     return np.array(path, dtype=int)
-

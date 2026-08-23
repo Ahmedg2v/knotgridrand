@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
-from dictionaries import array_knot
+from .knot_structures import array_knot
 
 def sta_writhe(grid_dict,forward_map,width):
     '''Calculate the writhe of a knot using the Gauss integral approximation.

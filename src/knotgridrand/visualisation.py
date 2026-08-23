@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import draw,pause,close
 from mpl_toolkits.mplot3d import Axes3D
-from dictionaries import array_knot
+from .knot_structures import array_knot
 
 def plot_knot(gd, cd):
     '''Plot a knot in 3D.
