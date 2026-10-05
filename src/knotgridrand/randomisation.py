@@ -316,7 +316,7 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
 
 # THE RANDOMISATION LOOP
 
-def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1):
+def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1, r_states=False, r_lengths=False, r_energies=False):
     '''Randomise a given knot using the BFACF algorithm and large scale slide moves.
     
     Parameters
@@ -377,7 +377,7 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
     lengths=[]
     states=[]
     energies=[]
-    slides=[]
+
     for m in range(t):
         gd, fwd, bwd, gdc, next_key, energy = BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, theta)
 
@@ -385,7 +385,11 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
             gd, fwd, bwd, gdc, next_key, energy, worked = rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, phi)
             #if worked:
                 #print(m)
-        #states.append(array_knot(gd,fwd))
-        #lengths.append(len(gd))
-        #energies.append(energy)
-    return gd, fwd, bwd, gdc, next_key, energies, slides, lengths, states
+        if r_states:
+            states.append(array_knot(gd,fwd))
+        if r_lengths:
+            lengths.append(len(gd))
+        if r_energies:
+            energies.append(energy)
+
+    return gd, fwd, bwd, gdc, next_key, states,energies, lengths

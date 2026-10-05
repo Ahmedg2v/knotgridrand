@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import draw,pause,close
 from mpl_toolkits.mplot3d import Axes3D
 from .knot_structures import array_knot
+import matplotlib.animation as animation
 
 def plot_knot(gd, cd):
     '''Plot a knot in 3D.
@@ -70,4 +71,67 @@ def graph_avg(x,label):
     plt.xlabel('time step', fontsize=14)
     plt.ylabel(label, fontsize=14)
 
+    plt.show()
+
+def animate_knot_evolution(states, coord_min, coord_max, step=10, interval=1):
+    '''
+    Animates a list of (N, 3) knot states using pre-known axes limits.
+
+    Parameters
+    ----------
+    states : list of arrays, shape (N, 3)
+        List of knot states over time.
+
+    coord_min : list of float
+        Minimum coordinates for each axis.
+
+    coord_max : list of float
+        Maximum coordinates for each axis.
+
+    step : int
+        Frame skip (stride) for animation.
+
+    interval : int
+        Delay between frames in milliseconds.
+    '''
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Apply your known limits directly
+    ax.set_xlim([coord_min[0], coord_max[0]])
+    ax.set_ylim([coord_min[1], coord_max[1]])
+    ax.set_zlim([coord_min[2], coord_max[2]])
+    
+    ax.set_title("Knot Evolution")
+    ax.axis('on') 
+    
+    line, = ax.plot([], [], [], lw=1, color='green')
+    
+    # Apply the frame skip (stride)
+    plot_states = states[1::step]
+    #print(f"Animating {len(plot_states)} frames (Step size: {step})...")
+
+    # The update function
+    def update(frame_index):
+        current_state = plot_states[frame_index]
+        
+        # Slicing the (N, 3) array
+        x = current_state[:, 0]
+        y = current_state[:, 1]
+        z = current_state[:, 2]
+        
+        line.set_data(x, y)
+        line.set_3d_properties(z)
+        
+        return [line]
+
+    ani = animation.FuncAnimation(
+        fig, 
+        update, 
+        frames=len(plot_states), 
+        interval=interval, 
+        blit=False, 
+        repeat=True
+    )
+    
     plt.show()
