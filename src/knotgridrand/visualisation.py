@@ -73,7 +73,7 @@ def graph_avg(x,label):
 
     plt.show()
 
-def animate_knot_evolution(states, coord_min, coord_max, step=10, interval=1):
+def animate_knot_evolution(states, coord_min=None, coord_max=None, step=10, interval=1):
     '''
     Animates a list of (N, 3) knot states using pre-known axes limits.
 
@@ -83,10 +83,10 @@ def animate_knot_evolution(states, coord_min, coord_max, step=10, interval=1):
         List of knot states over time.
 
     coord_min : list of float
-        Minimum coordinates for each axis.
+        Minimum coordinates for each axis, calculated from the states if not provided.
 
     coord_max : list of float
-        Maximum coordinates for each axis.
+        Maximum coordinates for each axis, calculated from the states if not provided.
 
     step : int
         Frame skip (stride) for animation.
@@ -96,7 +96,16 @@ def animate_knot_evolution(states, coord_min, coord_max, step=10, interval=1):
     '''
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, projection='3d')
-    
+
+    if coord_min is None or coord_max is None:
+        # Calculate the min and max coordinates from the states
+        coord_min = [np.min([knot.min(axis=0) for knot in states], axis=0)][0]
+        
+        coord_max = [np.max([knot.max(axis=0) for knot in states], axis=0)][0]
+
+    else:
+        pass
+
     # Apply your known limits directly
     ax.set_xlim([coord_min[0], coord_max[0]])
     ax.set_ylim([coord_min[1], coord_max[1]])
