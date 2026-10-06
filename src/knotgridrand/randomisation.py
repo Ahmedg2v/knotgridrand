@@ -316,7 +316,7 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
 
 # THE RANDOMISATION LOOP
 
-def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1, r_states=False, r_lengths=False, r_energies=False):
+def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1, r_step=20, r_states=False, r_lengths=False, r_energies=False):
     '''Randomise a given knot using the BFACF algorithm and large scale slide moves.
     
     Parameters
@@ -356,6 +356,12 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
 
     theta, phi : float
         Scaling factors for the probabilstic acceptance rules for BFACF and Slide moves.
+
+    r_step : int
+        Number of time steps after which the knot quantities/states are recorded.
+
+    r_states, r_lengths, r_energies : bool
+        Whether to record the knot states, lengths and energies, respectively.
     
     Returns
     -------
@@ -365,7 +371,7 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
     next_key : int
         New key to be used as input in case of running the randomisation again without starting over.
 
-    energies, slides, lengths, states : list
+    states, energies, lengths : list
         Optional lists that store the knot quantities/states as needed.
     '''
     energy = energy_calc(gd, fwd, bwd, alpha, beta, gamma)
@@ -385,11 +391,12 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
             gd, fwd, bwd, gdc, next_key, energy, worked = rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, phi)
             #if worked:
                 #print(m)
-        if r_states:
-            states.append(array_knot(gd,fwd))
-        if r_lengths:
-            lengths.append(len(gd))
-        if r_energies:
-            energies.append(energy)
+        if m%r_step==0:
+            if r_states:
+                states.append(array_knot(gd,fwd))
+            if r_lengths:
+                lengths.append(len(gd))
+            if r_energies:
+                energies.append(energy)
 
-    return gd, fwd, bwd, gdc, next_key, states,energies, lengths
+    return gd, fwd, bwd, gdc, next_key, states, energies, lengths
