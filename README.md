@@ -71,11 +71,12 @@ where:
 
 The writhe of a knot can be calculated from its three-dimensional coordinates according to:
 
-$
+$$
     \omega_{StA}(i) = \frac{2}{4\pi}\sum_{k=i-\frac{l_w}{2}}^{k=i-\frac{l_w}{2}}
     \sum_{l=0}^{N}{\frac{(\mathbf{t}_k\times \mathbf{t}_l)\cdot
     (\mathbf{r}_k-\mathbf{r}_l)}{|\mathbf{r}_k-\mathbf{r}_l|^3}}
-$[^writhe]
+$$
+[^writhe]
 [^writhe]: From the Supplementary Information for Joseph Lahoud Sleiman et al. “Geometric learning of knot topology”. In: Soft Matter
 20.1 (2024), pp. 71–78.
 
