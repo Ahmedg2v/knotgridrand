@@ -49,8 +49,9 @@ The randomisation process relies on the **BFACF algorithm** for local Monte-Carl
 An energy function can be used to control the randomisation:
 
 $$
-    E=\alpha N + \beta \left(N - \sum_{n=1}^{N}{a_n \cdot b_n} \right) + \gamma \left(\sum_{n=1}^{N}{r_n - r_{CoM}} \right)
+E=\alpha N + \beta \left(N - \sum_{n=1}^{N}{a_n \cdot b_n} \right) + \gamma \left(\sum_{n=1}^{N}{r_n - r_{CoM}} \right)
 $$
+
 where:
 * $N$ is the number of segments/points of the knot
 * $a_n$ and $b_n$ are the two vectors connecting the point $n$ to the preceding and proceeding points
@@ -58,12 +59,15 @@ where:
 * $\alpha$, $\beta$ and $\gamma$ control the relative energetic costs of knot length, number of bends and distance of each point to the CoM, respectively
 
 A proposed move $M$ is accepted with probability $P(M)$:
+
 $$
-P(M) = \begin{cases}
-        e^{-\frac{\Delta E}{T}}, & \Delta E > 0 \\
-        1 - e^{-\frac{\Delta E}{T}}, & \Delta E \leq 0
-    \end{cases}
+P(M) = 
+\begin{cases}
+e^{-\frac{\Delta E}{T}}, & \Delta E > 0, \\
+1 - e^{-\frac{\Delta E}{T}}, & \Delta E \leq 0
+\end{cases}
 $$
+
 where:
 * $\Delta E$ is the change in energy between the two configurations
 * $T$ is a temperature-like parameter 
@@ -76,6 +80,7 @@ $$
     \sum_{l=0}^{N}{\frac{(\mathbf{t}_k\times \mathbf{t}_l)\cdot
     (\mathbf{r}_k-\mathbf{r}_l)}{|\mathbf{r}_k-\mathbf{r}_l|^3}}
 $$
+
 [^writhe]
 [^writhe]: From the Supplementary Information for Joseph Lahoud Sleiman et al. “Geometric learning of knot topology”. In: Soft Matter
 20.1 (2024), pp. 71–78.
