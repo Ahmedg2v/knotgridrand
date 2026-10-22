@@ -149,7 +149,7 @@ The project is therefore intended primarily as a computational research tool, bu
 
 The package has been used to generate datasets containing **hundreds of thousands of randomised knot configurations**, with individual configurations containing approximately **1,000 lattice points on average**, using the University of Birmingham HPC cluster (BlueBear).
 
-Each dataset of a **hundred thousand randomised knots** (of the same type) was generated using the scripts in QQQQQQQQ as an array job with 1000 nodes, randomising 100 knots each. This process took 15-20 minutes per dataset using the parameters referenced in the project REPORT.
+Each dataset of a **hundred thousand randomised knots** (of the same type) was generated using the scripts in [knotgridrand_HPC](https://github.com/Ahmedg2v/knotgridrand_HPC) as an array job with 1000 nodes, randomising 100 knots each. This process took 15-20 minutes per dataset using the parameters referenced in the project [report](https://drive.google.com/file/d/10OT540xMB-NDDF0PgPgucR_COFQMPtku/view?usp=sharing).
 
 ## Dependencies
 

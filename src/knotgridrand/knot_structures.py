@@ -197,7 +197,7 @@ def update_dict_remove(index, grid_dict, forward_map, backward_map, grid_dict_ch
     
     return grid_dict, forward_map, backward_map, grid_dict_check
 
-def update_dict_add_batch(index, str_start, str_end, str_dict, str_cache, str_back, str_check, grid_dict, forward_map, backward_map, grid_dict_check):
+def update_dict_add_batch(index, str_start, str_end, str_dict, str_fwd, str_bwd, str_check, grid_dict, forward_map, backward_map, grid_dict_check):
     '''stitch a strand to the knot at index.
 
     Parameters
@@ -214,10 +214,10 @@ def update_dict_add_batch(index, str_start, str_end, str_dict, str_cache, str_ba
     str_dict : dict
         Maps point indices to coordinates for the strand.
 
-    str_cache : dict
+    str_fwd : dict
         Maps each point index to the next point along the strand.
 
-    str_back : dict
+    str_bwd : dict
         Maps each point index to the previous point along the strand.
 
     str_check : dict
@@ -250,8 +250,8 @@ def update_dict_add_batch(index, str_start, str_end, str_dict, str_cache, str_ba
         Maps coordinate tuples to point indices.
     '''
     
-    forward_map.update(str_cache)
-    backward_map.update(str_back)
+    forward_map.update(str_fwd)
+    backward_map.update(str_bwd)
     backward_map[forward_map[index]]=str_end
     forward_map[str_end]=forward_map[index]
     forward_map[index]=str_start
