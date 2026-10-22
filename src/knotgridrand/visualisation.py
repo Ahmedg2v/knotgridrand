@@ -26,7 +26,7 @@ def plot_knot(gd, cd):
     #ax.set_axis_off()
     #ax.grid(True)
     plot_points=np.vstack((grid_points,grid_points[0]))
-    ax.plot3D(*plot_points.T, 'green')
+    ax.plot3D(*plot_points.T, lw=1, color='green')
     #plt.axis('off')
     plt.show()
     
@@ -45,7 +45,7 @@ def plot_knot_array(gp):
     ax = plt.axes(projection='3d')
     
     plot_points=np.vstack((grid_points,grid_points[0]))
-    ax.plot3D(*plot_points.T, 'green')
+    ax.plot3D(*plot_points.T, lw=1, color='green')
     #plt.xlim(-2, 20)
     #plt.ylim(-20, 15)
     #plt.axis('off')
@@ -122,7 +122,7 @@ def animate_knot_evolution(states, coord_min=None, coord_max=None, step=10, inte
 
     # The update function
     def update(frame_index):
-        current_state = plot_states[frame_index]
+        current_state = np.vstack((plot_states[frame_index], plot_states[frame_index][0]))
         
         # Slicing the (N, 3) array
         x = current_state[:, 0]

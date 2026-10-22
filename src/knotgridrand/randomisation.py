@@ -6,7 +6,7 @@ from .energy import energy_calc, energy_calc_local
 
 # BFACF
 
-def BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, theta):
+def BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, energy, T, alpha, beta, gamma, theta):
     '''Run the BFACF algorithm.
     
     Parameters
@@ -178,7 +178,7 @@ def BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta
 
 # LARGE SCALE SLIDE MOVES
 
-def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, phi):
+def rng_slide(gd, fwd, bwd, gdc, next_key, b_mat, energy, T, alpha, beta, gamma, phi, strand_length):
     '''Randomly pick a strand or random length along the knot and translate it a random 
     distance distance in a random cardinal direction with a probability to make a second translation. 
     
@@ -220,6 +220,9 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
     phi : float
         Scaling factor for the probabilstic acceptance rules.
     
+    strand_length : int
+        Maximum length of the strand to be randomly picked.
+    
     Returns
     -------
     gd, fwd, bwd, gdc : dicts
@@ -233,21 +236,20 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
     '''
     worked=False
     next_key0 = next_key+5
-    length=len(gd)
     die0 = random.sample(b_mat,2)
     axis = die0[0]*random.choice([1,-1])
     dist = random.choice(range(5,20)) 
     start_pt = random.choice(list(gd.keys()))    #idx of the 1st point afterwhich the strand starts
-    #die1 = random.choice(range(int(0.01*length),int(0.1*length)))
-    die1 = random.choice(range(5,30))
-
+    #length=len(gd)
+    #die1 = random.choice(range(int(0.01*length+5),int(0.1*length)))
+    die1 = random.choice(range(5,strand_length))
     strand_idx = []
     strand_idx.append(fwd[start_pt])
 
     for u in range(die1):
         strand_idx.append(fwd[strand_idx[u]])
 
-    end_pt=fwd[strand_idx[-1]]
+    #end_pt=fwd[strand_idx[-1]]
     strand_pts = []
 
     for l in range(die1):
@@ -316,7 +318,7 @@ def rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, 
 
 # THE RANDOMISATION LOOP
 
-def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1, r_step=20, r_states=False, r_lengths=False, r_energies=False):
+def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6, beta=2, gamma=0, theta=1, phi=1, r_step=20, strand_length=30, r_states=False, r_lengths=False, r_energies=False):
     '''Randomise a given knot using the BFACF algorithm and large scale slide moves.
     
     Parameters
@@ -360,9 +362,12 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
     r_step : int
         Number of time steps after which the knot quantities/states are recorded.
 
+    strand_length : int
+        Maximum length of the strand to be randomly picked.
+
     r_states, r_lengths, r_energies : bool
         Whether to record the knot states, lengths and energies, respectively.
-    
+
     Returns
     -------
     gd, fwd, bwd, gdc : dict
@@ -385,10 +390,10 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
     energies=[]
 
     for m in range(t):
-        gd, fwd, bwd, gdc, next_key, energy = BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, theta)
+        gd, fwd, bwd, gdc, next_key, energy = BFACF(gd, fwd, bwd, gdc, next_key, bx, by, bz, energy, T, alpha, beta, gamma, theta)
 
         if m%mod==0:
-            gd, fwd, bwd, gdc, next_key, energy, worked = rng_slide(gd, fwd, bwd, gdc, next_key, bx, by, bz, b_mat, energy, T, alpha, beta, gamma, phi)
+            gd, fwd, bwd, gdc, next_key, energy, worked = rng_slide(gd, fwd, bwd, gdc, next_key, b_mat, energy, T, alpha, beta, gamma, phi, strand_length=strand_length)
             #if worked:
                 #print(m)
         if m%r_step==0:
@@ -399,4 +404,6 @@ def randomise(gd, fwd, bwd, gdc, t=40000, next_key=10000, T=750, mod=4, alpha=6,
             if r_energies:
                 energies.append(energy)
 
-    return gd, fwd, bwd, gdc, next_key, states, energies, lengths
+    reset_keys_array = array_knot(gd,fwd)
+    gd, fwd, bwd, gdc = dictify(reset_keys_array)
+    return gd, fwd, bwd, gdc, states, energies, lengths
