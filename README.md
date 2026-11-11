@@ -73,6 +73,11 @@ $$
 where:
 * $\Delta E$ is the change in energy between the two configurations
 * $T$ is a temperature-like parameter
+
+### Example randomising a Trefoil
+
+[animation3_1.webm](https://github.com/user-attachments/assets/df724ecb-29e0-43c0-a430-5b84edb9d8d5)
+
 ## Writhe
 
 The writhe of a knot can be calculated from its three-dimensional coordinates according to:[^writhe]
