@@ -38,7 +38,7 @@ Knots are represented as ordered points in 3D space (then rasterised onto the cu
 
 Consecutive points are connected by unit lattice steps along the Cartesian axes. Diagonal steps are not permitted.
 
-<img src="assets/rasterise3_1.png" alt="Rasterisation of a Trefoil" width=60% margin:auto>
+<img src="assets/rasterise3_1.png" alt="Rasterisation of a Trefoil" width=80% margin:auto>
 
 A dictionary-based representation is used to make it easier to perform local operations and efficiently identify neighbouring lattice points.
 
