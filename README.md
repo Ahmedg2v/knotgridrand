@@ -27,7 +27,7 @@ ted polygons”. In: Journal of Physics A: Mathematical and General 24.23 (1991)
 p. 5553.
 ## Knot Representation
 
-Knots are represented as ordered points on a three-dimensional cubic lattice:
+Knots are represented as ordered points in 3D space (then rasterised onto the cubic lattice for randomisation):
 
 ```text
 (x₀, y₀, z₀)
@@ -37,6 +37,8 @@ Knots are represented as ordered points on a three-dimensional cubic lattice:
 ```
 
 Consecutive points are connected by unit lattice steps along the Cartesian axes. Diagonal steps are not permitted.
+
+<img src="assets/rasterise3_1.png" alt="Rasterisation of a Trefoil" width=60% margin:auto>
 
 A dictionary-based representation is used to make it easier to perform local operations and efficiently identify neighbouring lattice points.
 
@@ -63,14 +65,14 @@ A proposed move $M$ is accepted with probability $P(M)$:
 $$
 P(M) = 
 \begin{cases}
-e^{-\frac{\Delta E}{T}}, & \Delta E > 0, \\
+e^{-\frac{\Delta E}{T}}, & \Delta E > 0 \\
 1 - e^{-\frac{\Delta E}{T}}, & \Delta E \leq 0
 \end{cases}
 $$
 
 where:
 * $\Delta E$ is the change in energy between the two configurations
-* $T$ is a temperature-like parameter 
+* $T$ is a temperature-like parameter
 ## Writhe
 
 The writhe of a knot can be calculated from its three-dimensional coordinates according to:[^writhe]
@@ -156,7 +158,7 @@ Each dataset of a **hundred thousand randomised knots** (of the same type) was g
 The project was developed in Python 3.10 and primarily uses the scientific Python ecosystem, including:
 
 * NumPy
-* SciPy
+* SciPy (to rotate knots in 3D space, not used in the randomisation)
 * Matplotlib
 
 See `requirements.txt` for the complete list of dependencies.
@@ -168,9 +170,3 @@ This project was completed as part of the MSci Theoretical Physics programme at 
 ## Author
 
 **Ahmed Ismaiel**
-
-## License
-
-This project is currently available for personal and academic use. See the repository for licensing information.
-
-
